@@ -1,1 +1,83 @@
-# AlertaGrafanaNoData
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libro de Ejecución - Alerta Sin Datos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        h1, h2, h3 {
+            color: #007bff;
+        }
+        a {
+            color: #0056b3;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚠️ Libro de Ejecución: Alerta Sin Datos en InfluxDB</h1>
+        <p>
+            Este libro de ejecución detalla los pasos a seguir cuando se active la alerta de "Sin datos recibidos en InfluxDB".
+        </p>
+
+        <h2>Descripción de la Alerta</h2>
+        <p>La alerta se activa cuando no se detectan datos desde InfluxDB en el rango de tiempo configurado, lo cual podría indicar:</p>
+        <ul>
+            <li>Problemas con la red.</li>
+            <li>Interrupción en el flujo de datos desde las estaciones.</li>
+            <li>Error en el servidor InfluxDB.</li>
+        </ul>
+
+        <h2>Pasos para el Diagnóstico</h2>
+        <ol>
+            <li><strong>Verificar la conectividad de la estación afectada:</strong> 
+                Confirma que el dispositivo o estación de monitoreo esté conectado a la red y funcionando correctamente.
+            </li>
+            <li><strong>Revisar el servidor InfluxDB:</strong> 
+                Comprueba que el servidor esté operativo y que las consultas funcionen adecuadamente.
+            </li>
+            <li><strong>Inspeccionar el flujo de datos:</strong> 
+                Asegúrate de que los scripts o procesos responsables de enviar datos a InfluxDB estén en funcionamiento.
+            </li>
+        </ol>
+
+        <h2>Acciones Correctivas</h2>
+        <p>Si encuentras problemas, sigue estos pasos:</p>
+        <ul>
+            <li>Reinicia la estación de monitoreo o dispositivo afectado.</li>
+            <li>Restablece la conexión entre la estación y el servidor.</li>
+            <li>Consulta al equipo técnico si el problema persiste.</li>
+        </ul>
+
+        <h2>Información Adicional</h2>
+        <p>
+            Esta alerta fue configurada para el sistema: <code>{{ $labels.nombre_estacion }}</code><br>
+            Últimos datos detectados: <code>{{ $values.time }}</code><br>
+            Ubicación de la estación: <code>{{ $labels.latitude }}, {{ $labels.longitude }}</code>
+        </p>
+
+        <h2>Contacto de Soporte</h2>
+        <p>Si necesitas más ayuda, contacta al equipo técnico en <a href="mailto:soporte@miempresa.com">soporte@miempresa.com</a>.</p>
+    </div>
+</body>
+</html>
