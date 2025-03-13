@@ -41,11 +41,12 @@
         </p>
 
         <h2>Descripción de la Alerta</h2>
-        <p>La alerta se activa cuando no se detectan datos desde InfluxDB en el rango de tiempo configurado, lo cual podría indicar:</p>
+        <p>La alerta se activa cuando no se detectan datos desde InfluxDB en el rango de tiempo configurado, lo cual podría deberse a:</p>
         <ul>
             <li>Problemas con la red.</li>
             <li>Interrupción en el flujo de datos desde las estaciones.</li>
             <li>Error en el servidor InfluxDB.</li>
+            <li>Avería en algún <strong>data logger</strong> de las arquetas.</li>
         </ul>
 
         <h2>Pasos para el Diagnóstico</h2>
@@ -56,8 +57,8 @@
             <li><strong>Revisar el servidor InfluxDB:</strong> 
                 Comprueba que el servidor esté operativo y que las consultas funcionen adecuadamente.
             </li>
-            <li><strong>Inspeccionar el flujo de datos:</strong> 
-                Asegúrate de que los scripts o procesos responsables de enviar datos a InfluxDB estén en funcionamiento.
+            <li><strong>Inspeccionar los data loggers:</strong> 
+                Revisa si algún data logger en las arquetas está averiado o presenta problemas de funcionamiento.
             </li>
         </ol>
 
@@ -66,6 +67,7 @@
         <ul>
             <li>Reinicia la estación de monitoreo o dispositivo afectado.</li>
             <li>Restablece la conexión entre la estación y el servidor.</li>
+            <li>Si el problema está en un <strong>data logger</strong>, considera reemplazarlo o reparar el componente afectado.</li>
             <li>Consulta al equipo técnico si el problema persiste.</li>
         </ul>
 
