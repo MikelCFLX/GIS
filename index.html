@@ -1,85 +1,106 @@
 <!DOCTYPE html>
-<html lang="es">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Libro de Ejecución - Alerta Sin Datos</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background-color: #f8f9fa;
-            color: #343a40;
-        }
-        h1, h2, h3 {
-            color: #007bff;
-        }
-        a {
-            color: #0056b3;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
-        }
-        .container {
-            max-width: 800px;
-            margin: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Mapa de USA con ECharts</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    #main {
+      width: 100%;
+      height: 100vh;
+    }
+  </style>
+  <!-- ECharts -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <!-- jQuery para $.get -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>⚠️ Libro de Ejecución: Alerta Sin Datos en InfluxDB</h1>
-        <p>
-            Este libro de ejecución detalla los pasos a seguir cuando se active la alerta de "Sin datos recibidos en InfluxDB".
-        </p>
+  <div id="main"></div>
+  <script>
+    var ROOT_PATH = 'https://echarts.apache.org/examples';
 
-        <h2>Descripción de la Alerta</h2>
-        <p>La alerta se activa cuando no se detectan datos desde InfluxDB en el rango de tiempo configurado, lo cual podría deberse a:</p>
-        <ul>
-            <li>Problemas con la red.</li>
-            <li>Interrupción en el flujo de datos desde las estaciones.</li>
-            <li>Error en el servidor InfluxDB.</li>
-            <li>Avería en algún <strong>data logger</strong> de las arquetas.</li>
-        </ul>
+    var chartDom = document.getElementById('main');
+    var myChart = echarts.init(chartDom);
+    var option;
 
-        <h2>Pasos para el Diagnóstico</h2>
-        <ol>
-            <li><strong>Verificar la conectividad de la estación afectada:</strong> 
-                Confirma que el dispositivo o estación de monitoreo esté conectado a la red y funcionando correctamente.
-            </li>
-            <li><strong>Revisar el servidor InfluxDB:</strong> 
-                Comprueba que el servidor esté operativo y que las consultas funcionen adecuadamente.
-            </li>
-            <li><strong>Inspeccionar los data loggers:</strong> 
-                Revisa si algún data logger en las arquetas está averiado o presenta problemas de funcionamiento.
-            </li>
-        </ol>
+    myChart.showLoading();
 
-        <h2>Acciones Correctivas</h2>
-        <p>Si encuentras problemas, sigue estos pasos:</p>
-        <ul>
-            <li>Reinicia la estación de monitoreo o dispositivo afectado.</li>
-            <li>Restablece la conexión entre la estación y el servidor.</li>
-            <li>Si el problema está en un <strong>data logger</strong>, considera reemplazarlo o reparar el componente afectado.</li>
-            <li>Consulta al equipo técnico si el problema persiste.</li>
-        </ul>
+    $.get(ROOT_PATH + '/data/asset/geo/USA.json', function (usaJson) {
+      echarts.registerMap('USA', usaJson, {
+        Alaska: {
+          left: -131,
+          top: 25,
+          width: 15
+        },
+        Hawaii: {
+          left: -110,
+          top: 28,
+          width: 5
+        },
+        'Puerto Rico': {
+          left: -76,
+          top: 26,
+          width: 2
+        }
+      });
 
-        <h2>Información Adicional</h2>
-        <p>
-            Esta alerta fue configurada para el sistema: <code>{{ $labels.nombre_estacion }}</code><br>
-            Últimos datos detectados: <code>{{ $values.time }}</code><br>
-            Ubicación de la estación: <code>{{ $labels.latitude }}, {{ $labels.longitude }}</code>
-        </p>
+      function randomPieSeries(center, radius) {
+        var data = ['A', 'B', 'C', 'D'].map(function (t) {
+          return {
+            value: Math.round(Math.random() * 100),
+            name: 'Category ' + t
+          };
+        });
+        return {
+          type: 'pie',
+          coordinateSystem: 'geo',
+          tooltip: {
+            formatter: '{b}: {c} ({d}%)'
+          },
+          label: {
+            show: false
+          },
+          labelLine: {
+            show: false
+          },
+          animationDuration: 0,
+          radius: radius,
+          center: center,
+          data: data
+        };
+      }
 
-        <h2>Contacto de Soporte</h2>
-        <p>Si necesitas más ayuda, contacta al equipo técnico en <a href="mailto:soporte@miempresa.com">soporte@miempresa.com</a>.</p>
-    </div>
+      option = {
+        geo: {
+          map: 'USA',
+          roam: true,
+          itemStyle: {
+            areaColor: '#e7e8ea'
+          }
+        },
+        tooltip: {},
+        legend: {},
+        series: [
+          randomPieSeries([-86.753504, 33.01077], 15),
+          randomPieSeries([-116.853504, 39.8], 25),
+          randomPieSeries([-99, 31.5], 30),
+          randomPieSeries(
+            parseInt(echarts.version.split('.').join('')) > 540
+              ? 'Maine'
+              : [-69, 45.5],
+            12
+          )
+        ]
+      };
+
+      myChart.hideLoading();
+      myChart.setOption(option);
+    });
+  </script>
 </body>
 </html>
